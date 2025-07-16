@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Date="16/07/2025">
+  <Test Name="sample" ApplicationName="XafEasyTestDemo" Started="16/07/2025 11:32:31" Elapsed="00:00:55.1245491" Result="Passed" MachineName="DESKTOP-CK3CLIN" IP="192.168.1.101" />
+</Tests>
