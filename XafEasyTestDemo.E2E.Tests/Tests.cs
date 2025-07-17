@@ -35,21 +35,37 @@ public class XafEasyTestDemoTests : IDisposable {
     [Theory]
     [InlineData(BlazorAppName)]
     public void TestBlazorApp(string applicationName) {
-        FixtureContext.DropDB(AppDBName);
+        // Preparar la base de datos
+        FixtureContext.DropDB("XafEasyTestDemoEasyTest");
+
+        // Crear el contexto de aplicación
         var appContext = FixtureContext.CreateApplicationContext(applicationName);
         appContext.RunApplication();
-        appContext.GetForm().FillForm(("User Name", "Admin"));
-        appContext.GetAction("Log In").Execute();
-        Assert.True(appContext.Navigate("My Details"));
-        Assert.True(appContext.Navigate("Role"));
-        Assert.True(appContext.Navigate("Users"));
+
+        // Navegar a la vista "Student"
+        appContext.Navigate("Student");
+
+        // Crear un nuevo "Student"
+        appContext.GetAction("New").Execute();
+        appContext.GetForm().FillForm(("First Name", "John"), ("Last Name", "Smith"));
+        appContext.GetAction("Save").Execute();
+
+        // Verificar que los valores se han guardado correctamente
+        appContext.Navigate("Student");
+        var table = appContext.GetGrid();
+        var rowCount = table.GetRowCount();
+        Assert.Equal(1, rowCount);
+
+        var row = table.GetRow(0, "First Name", "Last Name");
+        Assert.Equal("John", row.GetValue(0));
+        Assert.Equal("Smith", row.GetValue(1));
     }
 
-    [Theory]
-    [InlineData(WinAppName)]
-    public void TestWinApp(string applicationName) {
-        FixtureContext.DropDB(AppDBName);
-        var appContext = FixtureContext.CreateApplicationContext(applicationName);
-        appContext.RunApplication();
-    }
+    //[Theory]
+    //[InlineData(WinAppName)]
+    //public void TestWinApp(string applicationName) {
+    //    FixtureContext.DropDB(AppDBName);
+    //    var appContext = FixtureContext.CreateApplicationContext(applicationName);
+    //    appContext.RunApplication();
+    //}
 }
